@@ -4,6 +4,8 @@ from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, Gradien
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn import preprocessing
+
+np.random.seed(33)
 df = pd.read_csv('train_clean.csv')
 df['has_name'] = np.where(df['has_name'], 1, 0)
 df = df.fillna(df.mean())
@@ -16,7 +18,7 @@ features = pd.get_dummies(df[['RelativeAge', 'CleanColor', 'AnimalType', 'has_na
 #imp = preprocessing.Imputer(missing_values='NaN')  # defaults to using 'mean'
 #imp.fit(features)  # fit the imputer to the features
 #feat_imp = imp.transform(features)  # transform the NaN values
-X_train, X_test, y_train, y_test = train_test_split(features, target, train_size=0.7)
+X_train, X_test, y_train, y_test = train_test_split(features, target, train_size=0.7) # ~ 55% accuracy
 clf = RandomForestClassifier(n_estimators=100)
 y_pred = clf.fit(X_train, y_train).predict(X_test)
 cm = confusion_matrix(y_test, y_pred)

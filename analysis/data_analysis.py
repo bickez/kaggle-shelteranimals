@@ -9,6 +9,7 @@ df['OutcomeType'].value_counts()
 df['AnimalType'].value_counts()
 df[['OutcomeType', 'AnimalType']].describe()
 
+
 def age_to_months(x):
 	try: 
 		spl = x.split(' ')
@@ -16,10 +17,14 @@ def age_to_months(x):
 		return np.nan
 	if spl[1] == 'years' or spl[1] == 'year':
 		return int(spl[0]) * 12
+	elif spl[1] == 'weeks' or spl[1] == 'week':
+		return int(spl[0]) / 4.
+	elif spl[1] == 'days' or spl[1] == 'day':
+		return int(spl[0]) / 30.
 	else:
 		return int(spl[0])	
 
-df['AgeMonths'] = df['AgeuponOutcome'].apply(lambda x : age_to_months(x))
+df['AgeMonths'] = df['AgeuponOutcome'].apply(lambda x: age_to_months(x))
 df[['AgeMonths', 'AnimalType']].groupby('AnimalType').mean()
 mean_lifespan = df[['AgeMonths', 'AnimalType']].groupby('AnimalType').mean()
 df['RelativeAge'] = np.where(df['AnimalType'] == 'Cat', df['AgeMonths'] / mean_lifespan.loc['Cat'].values, df['AgeMonths'] / mean_lifespan.loc['Dog'].values)
